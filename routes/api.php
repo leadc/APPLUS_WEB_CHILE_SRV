@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReservasController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,20 +19,13 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/test', function (Request $request) {
-    return "VALIDO";
-});
+Route::get('/test', function (Request $request) { return 'Test'; });
 
-/*
-    Route::prefix('users')->group(function () {
-        Route::post('login', 'UserController@Login')->middleware('loginToken');
-        Route::post('checkLogin', 'UserController@CheckLogin')->middleware('CheckLogin');
-        Route::get('getUsers', 'UserController@GetUsers')->middleware('autentication');
-        Route::get('getUserById', 'UserController@GetUserById')->middleware('autentication');
-        Route::post('createUser', 'UserController@CreateUser')->middleware('autentication');
-        Route::post('setUser', 'UserController@SetUser')->middleware('autentication');
-        Route::post('uploadImg', 'UserController@UploadImage')->middleware('autentication');
-        Route::post('recoverPassword', 'UserController@RecoverPassword');
-        Route::post('resetPassword', 'UserController@ResetPassword');
-    });
- */
+Route::prefix('/reservas')->group(function(){
+    Route::get('obtenerDataPaso1', [ReservasController::class, 'ObtenerDataPaso1']);
+    Route::get('obtenerDataPaso1', [ReservasController::class, 'ObtenerDataPaso1']);
+    Route::get('obtenerDataPaso3', [ReservasController::class, 'ObtenerDataPaso3']);
+    Route::get('obtenerDisponibilidad', [ReservasController::class, 'ObtenerDisponibilidad']);
+    Route::get('validarVehiculo', [ReservasController::class, 'ValidarVehiculo']);
+    Route::post('reservar', [ReservasController::class, 'RealizarReserva']);
+});
