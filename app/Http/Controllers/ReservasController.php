@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Centro;
+use App\Models\Region;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -21,8 +23,24 @@ class ReservasController extends Controller
      */
     public static function ObtenerDataPaso1(Request $request){
         try{
+            $centros = Centro::all();
+            $regiones = Region::all();
+            $responseData = [];
+
+            foreach ($centros as $centro) {
+                foreach ($regiones as $region) {
+                    if ($region->CODIGO === $centro->zona) {
+                        $region->addPlanta($centro);
+                    }
+                }
+            }
+
+            foreach ($regiones as $region) {
+                array_push($responseData, $region->exportData());
+            }
+
             return self::GetResponse(
-                null,
+                (Object)['regiones' => $responseData],
                 'Opciones para regiones y plantas.'
             );
         }catch(Exception $e){
