@@ -6,17 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use stdClass;
 
-class Centro extends Model
+class ComoNosConocio extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $table = 'centros';
+    protected $table = 'COMO_NOS_CONOCIO';
 
     public function exportData() {
         $export = new stdClass();
-        $export->id = $this->Centro;
-        $export->nombre = $this->Nombre;
-        $export->observacion = $this->Observacion;
+        $export->id = $this->id;
+        $export->descripcion = $this->descripcion;
         return $export;
     }
 }

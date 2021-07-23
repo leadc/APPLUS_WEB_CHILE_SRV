@@ -6,17 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use stdClass;
 
-class Centro extends Model
+class Comuna extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $table = 'centros';
+    protected $table = 'comuna';
 
     public function exportData() {
         $export = new stdClass();
-        $export->id = $this->Centro;
-        $export->nombre = $this->Nombre;
-        $export->observacion = $this->Observacion;
+        $export->id = $this->CODCOMUNA;
+        $export->descripcion = $this->NOMCOMUNA;
         return $export;
     }
 }

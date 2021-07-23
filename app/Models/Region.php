@@ -9,10 +9,10 @@ use stdClass;
 class Region extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+    protected $table = 'zona';
 
     private $plantas = [];
-
-    protected $table = 'zona';
 
     public function addPlanta($planta) {
         array_push($this->plantas, $planta);
