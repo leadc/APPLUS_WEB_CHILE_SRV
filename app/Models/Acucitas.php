@@ -83,7 +83,7 @@ class Acucitas extends Model
             DB::table('acucitas')
                 ->where('centro', '=', $centro)
                 ->where('Fecha', '=', $fecha)
-                ->update(["$key" => ($acucita->$key - 1)]);
+                ->update(["$key" => ($acucita->$key + 1)]);
         }catch(Exception $e){
             Log::error('RevertirDisponibilidadConsumida::ConsumirDisponibilidad', [$e->getMessage()]);
         }
