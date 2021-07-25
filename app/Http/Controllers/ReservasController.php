@@ -239,6 +239,9 @@ class ReservasController extends Controller
                 'Reserva confirmada.'
             );
         } catch (CustomException $e) {
+            if ($reservaConsumida) {
+                Acucitas::RevertirDisponibilidadConsumida($data->reserva->idPlanta, $data->reserva->fecha, $data->reserva->hora);
+            }
             return $e->GetRespose();
         } catch(Exception $e){
             Log::error('Controller::RealizarReserva', [$request, $e]);
