@@ -147,7 +147,7 @@ class Reserva extends Model
         $this->codestado = '1'; // Siempre se inicia en estado 1
         $this->fechalta = (new DateTime())->format('Y-m-d\TH:i:s');
         $this->centro = $reserva->idPlanta;
-        $this->fecha = $reserva->fecha;
+        $this->fecha = $reserva->fecha . 'T00:00:00';
         $this->hora = $reserva->hora;
         $this->patente = $reserva->patente;
         $this->nombre = $reserva->nombre;
