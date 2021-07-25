@@ -123,8 +123,6 @@ class ReservasController extends Controller
                 return self::GetResponse(null, 'Falta enviar centro', 400);
             }
 
-            
-
             $mesesAdelantados = is_numeric($data->mesesAdelantados) && $data->mesesAdelantados > 0 ? intval($data->mesesAdelantados) : 0;
 
             $fechaActual = new DateTime();
@@ -146,9 +144,9 @@ class ReservasController extends Controller
                 0
             );
 
-            $acucitas = Acucitas::where('fecha', '>=', $fechaInicio->format('Y-m-d'))
-                ->where('fecha', '<=', $fechaFin->format('Y-m-d'))
-                ->where('fecha', '>', $fechaActual->format('Y-m-d'))
+            $acucitas = Acucitas::where('fecha', '>=', $fechaInicio->format('Y-m-d') . 'T00:00:00')
+                ->where('fecha', '<=', $fechaFin->format('Y-m-d') . 'T23:59:59')
+                ->where('fecha', '>', $fechaActual->format('Y-m-d') . 'T00:00:00')
                 ->where('centro', '=', $data->centro)
                 ->orderBy('fecha', 'asc')
                 ->get();
