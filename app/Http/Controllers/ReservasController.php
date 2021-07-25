@@ -230,7 +230,7 @@ class ReservasController extends Controller
                     $data->reserva->descripcionPlanta,
                     $data->reserva->observacionPlanta
                 );
-                Mail::to($reserva->mail)->send($mail);
+                Mail::to($reserva->email)->send($mail);
             } catch(Exception $e){
                 Log::error('Controller::RealizarReserva ERROR DE ENVIO DE MAIL', [$e]);
             }

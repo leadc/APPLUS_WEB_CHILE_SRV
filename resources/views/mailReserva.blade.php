@@ -65,7 +65,7 @@
                 <ul>
                     <li>Patente: <span class="font-weight-bold">{{ $patente }}</span></li>
                     <li>Código de reserva: <span class="font-weight-bold">{{ $codigo }}</span></li>
-                    <li>Día: <span class="font-weight-bold"><?= (new DateTime($fecha))->format('d/m/Y') ?></span></li>
+                    <li>Día: <span class="font-weight-bold">{{ $fecha }}</span></li>
                     <li>Horario: <span class="font-weight-bold">{{ $hora }}</span></li>
                     <li>Centro: <span class="font-weight-bold">{{ $centro }}</span></li>
                     <li>Dirección: <span class="font-weight-bold">{{ $direccion }}</span></li>

@@ -25,7 +25,7 @@ Route::get('/test', function (Request $request) {
     try{    
         $mailable = new MailReserva("Lean", 'Caceres', 'AAA123', 'CODIGO', '2021-05-02', '15:30', 'QUINTA NORMAL', 'DIRECCIóN');
         Mail::to('leandrodamian@hotmail.com')->send($mailable);
-        return 'sent';
+        return 'VALIDA WACHIN';
     }catch (Exception $e){
         return $e->getMessage();
     }
