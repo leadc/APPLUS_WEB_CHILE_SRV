@@ -145,7 +145,7 @@ class Reserva extends Model
     public function CargarDatosRecibidos($reserva){
         $this->Empresa = '0001'; // Siempre el mismo por default, en caso de que cambie modificar la lógica para recibirlo desde el front o determinarlo acá
         $this->codestado = '1'; // Siempre se inicia en estado 1
-        $this->fechalta = (new DateTime())->format('Y-m-d H:i:s');
+        $this->fechalta = (new DateTime())->format('Y-m-d\TH:i:s');
         $this->centro = $reserva->idPlanta;
         $this->fecha = $reserva->fecha;
         $this->hora = $reserva->hora;
