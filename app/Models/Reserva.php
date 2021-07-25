@@ -131,7 +131,7 @@ class Reserva extends Model
     public static function ReservaVigente($patente){
 
         $reserva = Reserva::where('patente', '=', $patente)
-            ->where('fecha', '>=', (new DateTime())->format('Y-m-d'))
+            ->where('fecha', '>=', (new DateTime())->format('Y-m-d') . 'T00:00:00')
             ->where('codestado', '=', 1)
             ->get()
             ->first();
