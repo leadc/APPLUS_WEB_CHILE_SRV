@@ -243,7 +243,7 @@ class ReservasController extends Controller
         } catch(Exception $e){
             Log::error('Controller::RealizarReserva', [$request, $e]);
             if ($reservaConsumida) {
-                Acucitas::RevertirDisponibilidadConsumida($data->reserva->centro, $data->reserva->fecha, $data->reserva->hora);
+                Acucitas::RevertirDisponibilidadConsumida($data->reserva->idPlanta, $data->reserva->fecha, $data->reserva->hora);
             }
             return self::GetResponse(
                 null,
