@@ -73,7 +73,8 @@ class ReservasController extends Controller
             $resp = (Object)[
                 'comunas' => [],
                 'comoNosConocio' => [],
-                'verificarCaptcha' => env('GOOGLE_CAPTCHA_ACTIVADO', false)
+                'verificarCaptcha' => env('GOOGLE_CAPTCHA_ACTIVADO', false),
+                'captchaPublicKey' => (env('GOOGLE_CAPTCHA_ACTIVADO', false) ? env('GOOGLE_API_PUBLIC', null) : null)
             ];
             
             // Obtiene las comunas y las carga en el array para mostrar en el front end
