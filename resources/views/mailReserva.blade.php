@@ -79,6 +79,5 @@
                 <p><a href="http://applusprt.cl">www.applusprt.cl</a></p>
             </div>
         </div>
-        <p style="text-align: center;">Fin mail</p>
     </body>
 </html>
