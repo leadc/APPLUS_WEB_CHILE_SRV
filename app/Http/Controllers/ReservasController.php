@@ -27,6 +27,26 @@ class ReservasController extends Controller
 {
 
     /**
+     * Devuelve si hay que validar o no el captcha según el archivo .env
+     */
+    public static function VerificarCaptcha(Request $request) {
+        try {
+            $resp = (Object)[
+                'verificarCaptcha' => env('GOOGLE_CAPTCHA_ACTIVADO', false),
+                'captchaPublicKey' => (env('GOOGLE_CAPTCHA_ACTIVADO', false) ? env('GOOGLE_API_PUBLIC', null) : null)
+            ];
+            return self::GetResponse($resp);
+        } catch (Exception $e){
+            Log::error('ReservasController::VerificarCaptcha', [$request, $e]);
+            return self::GetResponse(
+                null,
+                'Se produjo un error al obtener los datos para validación de captcha.',
+                500
+            );
+        }
+    }
+
+    /**
      * Devuelve las opciones para el combo box de regiones y de plantas
      * [GET]
      * Recibe: {}

@@ -24,6 +24,8 @@ Route::prefix('/reservas')->group(function(){
     Route::get('obtenerDisponibilidad', [ReservasController::class, 'ObtenerDisponibilidad']);
     Route::get('validarVehiculo', [ReservasController::class, 'ValidarVehiculo']);
     Route::post('reservar', [ReservasController::class, 'RealizarReserva']);
-    Route::get('localizar', ['middleware' => 'VerifyTokenWeb', ReservasController::class, 'LocalizarReserva']);
-    Route::delete('reserva', ['middleware' => 'VerifyTokenWeb', ReservasController::class, 'CancelarReserva']);
+    Route::get('localizar', [ReservasController::class, 'LocalizarReserva']);
+    Route::middleware('verifyTokenWeb')->delete('reserva', [ReservasController::class, 'CancelarReserva']);
 });
+
+Route::get('verificarCaptcha', [ReservasController::class, 'VerificarCaptcha']);

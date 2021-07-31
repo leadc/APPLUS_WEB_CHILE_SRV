@@ -34,7 +34,7 @@ class VerifyTokenWeb
                 ->json(
                     [
                         'data' => null,
-                        'mensaje' => 'El token de acceso enviado expiró.'
+                        'mensaje' => 'Su sesión expiró.'
                     ]
                 )->setStatusCode(403);
         }
