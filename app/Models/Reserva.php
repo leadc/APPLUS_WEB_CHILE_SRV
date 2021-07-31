@@ -12,6 +12,7 @@ class Reserva extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'Reserva';
+    protected $primaryKey = 'numero';
 
     /**
      * Lanza una excepción en caso de fallar alguna validación
@@ -77,7 +78,7 @@ class Reserva extends Model
     /**
      * Valida una patente recibida
      */
-    private static function ValidarPatente($patente) {
+    public static function ValidarPatente($patente) {
         $pattern = '/^(([A-Z]{2}[0-9]{4})|([A-Z]{3}[0-9]{3})|([A-Z]{4}[0-9]{2}))$/';
         return preg_match($pattern, $patente) > 0;
     }

@@ -17,21 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-Route::get('/test', function (Request $request) {
-    try{    
-        $mailable = new MailReserva("Lean", 'Caceres', 'AAA123', 'CODIGO', '2021-05-02', '15:30', 'QUINTA NORMAL', 'DIRECCIóN');
-        Mail::to('leandrodamian@hotmail.com')->send($mailable);
-        return 'VALIDA WACHIN';
-    }catch (Exception $e){
-        return $e->getMessage();
-    }
-
-});
-
 Route::prefix('/reservas')->group(function(){
     Route::get('obtenerDataPaso1', [ReservasController::class, 'ObtenerDataPaso1']);
     Route::get('obtenerDataPaso2', [ReservasController::class, 'ObtenerDataPaso2']);
@@ -39,4 +24,6 @@ Route::prefix('/reservas')->group(function(){
     Route::get('obtenerDisponibilidad', [ReservasController::class, 'ObtenerDisponibilidad']);
     Route::get('validarVehiculo', [ReservasController::class, 'ValidarVehiculo']);
     Route::post('reservar', [ReservasController::class, 'RealizarReserva']);
+    Route::get('localizar', ['middleware' => 'VerifyTokenWeb', ReservasController::class, 'LocalizarReserva']);
+    Route::delete('reserva', ['middleware' => 'VerifyTokenWeb', ReservasController::class, 'CancelarReserva']);
 });

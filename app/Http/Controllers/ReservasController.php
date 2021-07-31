@@ -10,12 +10,14 @@ use App\Models\ComoNosConocio;
 use App\Models\Comuna;
 use App\Models\Region;
 use App\Models\Reserva;
+use App\Models\Token;
 use DateInterval;
 use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use stdClass;
 
 /**
  * Esta clase Maneja todas las solicitudes del formulario de reservas
@@ -53,7 +55,7 @@ class ReservasController extends Controller
                 'Opciones para regiones y plantas.'
             );
         }catch(Exception $e){
-            Log::error('Controller::ObtenerDataPaso1', [$request, $e]);
+            Log::error('ReservasController::ObtenerDataPaso1', [$request, $e]);
             return self::GetResponse(
                 null,
                 'Se produjo un error al obtener regiones y plantas.',
@@ -97,7 +99,7 @@ class ReservasController extends Controller
         } catch (CustomException $e) {
             return $e->GetRespose();
         } catch(Exception $e){
-            Log::error('Controller::ObtenerDataPaso3', [$request, $e]);
+            Log::error('ReservasController::ObtenerDataPaso3', [$request, $e]);
             return self::GetResponse(
                 null,
                 'Se produjo un error al obtener las opciones de como nos conoció y comunas.',
@@ -163,7 +165,7 @@ class ReservasController extends Controller
 
             return self::GetResponse($respuesta);
         }catch(Exception $e){
-            Log::error('Controller::ObtenerDisponibilidad', [$request, $e]);
+            Log::error('ReservasController::ObtenerDisponibilidad', [$request, $e]);
             return self::GetResponse(
                 null,
                 'Se produjo un error al obtener la disponibilidad de turnos.',
@@ -232,7 +234,7 @@ class ReservasController extends Controller
                 );
                 Mail::to($reserva->email)->send($mail);
             } catch(Exception $e){
-                Log::error('Controller::RealizarReserva ERROR DE ENVIO DE MAIL', [$e]);
+                Log::error('ReservasController::RealizarReserva ERROR DE ENVIO DE MAIL', [$e]);
             }
             return self::GetResponse(
                 $reserva->codigo,
@@ -244,7 +246,7 @@ class ReservasController extends Controller
             }
             return $e->GetRespose();
         } catch(Exception $e){
-            Log::error('Controller::RealizarReserva', [$request, $e]);
+            Log::error('ReservasController::RealizarReserva', [$request, $e]);
             if ($reservaConsumida) {
                 Acucitas::RevertirDisponibilidadConsumida($data->reserva->idPlanta, $data->reserva->fecha, $data->reserva->hora);
             }
@@ -283,5 +285,112 @@ class ReservasController extends Controller
         # La variable que nos interesa para saber si el usuario pasó o no la prueba
         # está en success
         return $resultado && isset($resultado->success) ? $resultado->success : false;
+   }
+
+   public static function LocalizarReserva(Request $request) {
+        $data = (Object)$request->all();
+        try{
+            if (!isset($data->codigo)) {
+                return self::GetResponse(null, 'Debe enviar un código de reserva', 400);
+            }
+
+            if (!isset($data->patente) || !Reserva::ValidarPatente($data->patente)) {
+                return self::GetResponse(null, 'Debe enviar una patente válida', 400);
+            }
+
+            $verificarCaptcha = env('GOOGLE_CAPTCHA_ACTIVADO', false);
+            if ($verificarCaptcha && (!isset($data->captchaToken) || !self::verificarToken($data->captchaToken))) {
+                return self::GetResponse(null, 'Debe resolver el captcha', 400);
+            }
+
+            $currentDate = new DateTime();
+
+            $reserva = Reserva::where('patente', '=', $data->patente)
+                ->where('codigo', '=', $data->codigo)
+                ->where('codestado', '=', '1')
+                ->where('fecha', '>', $currentDate->format('Y-m-d') . 'T00:00:00')
+                ->orderBy('fecha', 'desc')
+                ->get()
+                ->first();
+
+            if (!$reserva) {
+                return self::GetResponse(null, 'Reserva no encontrada', 404);
+            }
+
+            $reservaResp = new stdClass();
+            $reservaResp->id = $reserva->numero;
+            $reservaResp->fecha = $reserva->fecha;
+            $reservaResp->hora = trim($reserva->hora);
+            $reservaResp->codigo = $reserva->codigo;
+            $reservaResp->patente = trim($reserva->patente);
+            $reservaResp->nombre = trim($reserva->nombre);
+            $reservaResp->apellido = trim($reserva->apellido);
+            $reservaResp->idPlanta = trim($reserva->centro);
+
+            $centro = Centro::where('centro', '=', $reservaResp->idPlanta)->get()->first();
+
+            if ($centro) {
+                $reservaResp->descripcionPlanta = trim($centro->Nombre);
+                $reservaResp->observacionPlanta = trim($centro->Observacion);
+            }
+
+            return self::GetResponse($reservaResp, 'Reserva localizada')
+                ->header('Authorization', Token::CreateToken(trim($reservaResp->patente).trim($reservaResp->codigo)));
+        } catch(CustomException $e) {
+            return $e->GetRespose();
+        } catch(Exception $e) {
+            Log::error('ReservasController::LocalizarReserva', [$request, $e]);
+            return self::GetResponse(
+                null,
+                'Se produjo un error al tratar de localizar la reserva.',
+                500
+            );
+        }
+   }
+
+   /**
+    * Endpoint que elimina una reserva
+    */
+   public static function CancelarReserva(Request $request) {
+        $data = (Object)$request->all();
+        try{
+            if (!isset($data->id)) {
+                return self::GetResponse(null, 'Debe enviar un id de reserva', 400);
+            }
+            if (!isset($data->patente)) {
+                return self::GetResponse(null, 'Debe enviar una patente', 400);
+            }
+            if (!isset($data->codigo)) {
+                return self::GetResponse(null, 'Debe enviar un código de reserva', 400);
+            }
+
+            $reserva = Reserva::where('numero', '=', $data->id)
+                ->where('patente', '=', $data->patente)
+                ->where('codigo', '=', $data->codigo)
+                ->where('codestado', '=', '1')
+                ->get()
+                ->first();
+
+            if (!$reserva) {
+                return self::GetResponse(null, 'Reserva no encontrada', 404);
+            }
+
+            $reserva->codestado = 2;
+
+            $reserva->save();
+
+            Acucitas::RevertirDisponibilidadConsumida($reserva->centro, substr($reserva->fecha, 0, 10), $reserva->hora);
+
+            return self::GetResponse(null, 'Reserva cancelada');
+        } catch(CustomException $e) {
+            return $e->GetRespose();
+        } catch(Exception $e) {
+            Log::error('ReservasController::CancelarReserva', [$request, $e]);
+            return self::GetResponse(
+                null,
+                'Se produjo un error al tratar de cancelar la reserva.',
+                500
+            );
+        }
    }
 }
