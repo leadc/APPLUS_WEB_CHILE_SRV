@@ -54,7 +54,7 @@ class Acucitas extends Model
      */
     public static function ConsumirDisponibilidad($centro, $fecha, $hora) {
         try{
-            $fecha = strlen($fecha) === 10 ? $fecha . 'T00:00:00' : $fecha;
+            $fecha = strlen($fecha) === 10 ? $fecha . ' 00:00:00' : $fecha;
             $acucita = Acucitas::where('centro', '=', $centro)->where('Fecha', '=', $fecha)->get()->first();
             $key = 'DP' . implode('', explode(':', $hora));
             if ($acucita->$key > 0) {
@@ -77,7 +77,7 @@ class Acucitas extends Model
      */
     public static function RevertirDisponibilidadConsumida($centro, $fecha, $hora) {
         try{
-            $fecha = strlen($fecha) === 10 ? $fecha . 'T00:00:00' : $fecha;
+            $fecha = strlen($fecha) === 10 ? $fecha . ' 00:00:00' : $fecha;
             $acucita = Acucitas::where('centro', '=', $centro)->where('Fecha', '=', $fecha)->get()->first();
             $key = 'DP' . implode('', explode(':', $hora));
             DB::table('acucitas')
