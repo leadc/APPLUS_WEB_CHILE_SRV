@@ -46,7 +46,7 @@ class Token extends Model
         $currentTime = new DateTime();
         $tokenModel = Token::where('token', '=', $token)
             ->where('userId', '=', $patente.$codigo)
-            ->where('expiresAt', '>', $currentTime->format("Y-m-d\TH:i:s"))
+            ->where('expiresAt', '>', $currentTime->format("Y-m-d H:i:s"))
             ->get()
             ->first();
         if ($tokenModel) {
@@ -61,7 +61,7 @@ class Token extends Model
      * Limpia las entradas de tokens vencidos
      */
     public static function CleanOldTokens() {
-        $currentTime = (new DateTime())->format("Y-m-d\TH:i:s");
+        $currentTime = (new DateTime())->format("Y-m-d H:i:s");
         $deletedRows = Token::where('expiresAt', '<', $currentTime)->delete();
         Log::info("Se eliminaron $deletedRows web tokens vencidos.");
     }

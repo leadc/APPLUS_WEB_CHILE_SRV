@@ -1,9 +1,6 @@
 <?php
 
 use App\Http\Controllers\ReservasController;
-use App\Mail\mails\MailReserva;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
