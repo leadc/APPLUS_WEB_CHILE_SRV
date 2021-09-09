@@ -58,10 +58,15 @@ class Acucitas extends Model
             $acucita = Acucitas::where('centro', '=', $centro)->where('Fecha', '=', $fecha)->get()->first();
             $key = 'DP' . implode('', explode(':', $hora));
             if ($acucita->$key > 0) {
+                $newValue = $acucita->$key - 1;
+                Log::info("UPDATE acucitas SET $key = $newValue WHERE centro = $centro and Fecha = '$fecha'");
+                DB::statement("UPDATE acucitas SET $key = $newValue WHERE centro = $centro and Fecha = '$fecha'");
+                /*
                 DB::table('acucitas')
                     ->where('centro', '=', $centro)
                     ->where('Fecha', '=', $fecha)
                     ->update(["$key" => ($acucita->$key - 1)]);
+                */
                 return true;
             }
             return false;
@@ -80,10 +85,15 @@ class Acucitas extends Model
             $fecha = strlen($fecha) === 10 ? $fecha . ' 00:00:00' : $fecha;
             $acucita = Acucitas::where('centro', '=', $centro)->where('Fecha', '=', $fecha)->get()->first();
             $key = 'DP' . implode('', explode(':', $hora));
+            $newValue = $acucita->$key + 1;
+            Log::info("UPDATE acucitas SET $key = $newValue WHERE centro = $centro and Fecha = '$fecha'");
+            DB::statement("UPDATE acucitas SET $key = $newValue WHERE centro = $centro and Fecha = '$fecha'");
+            /*
             DB::table('acucitas')
                 ->where('centro', '=', $centro)
                 ->where('Fecha', '=', $fecha)
                 ->update(["$key" => ($acucita->$key + 1)]);
+            */
         }catch(Exception $e){
             Log::error('RevertirDisponibilidadConsumida::ConsumirDisponibilidad', [$e->getMessage()]);
         }
