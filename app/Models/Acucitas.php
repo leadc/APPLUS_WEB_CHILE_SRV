@@ -58,7 +58,6 @@ class Acucitas extends Model
             $fechaArray = explode('-', $fecha);
             $fechaDMY = $fechaArray[2] . '-' . $fechaArray[1] . '-' . $fechaArray[0];
             $key = 'DP' . implode('', explode(':', $hora));
-            Log::info("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and (Fecha = '$fecha' or Fecha = '$fechaDMY')");
             DB::statement("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and (Fecha = '$fecha' or Fecha = '$fechaDMY')");
             /*
             DB::table('acucitas')
@@ -83,7 +82,6 @@ class Acucitas extends Model
             $fechaArray = explode('-', $fecha);
             $fechaDMY = $fechaArray[2] . '-' . $fechaArray[1] . '-' . $fechaArray[0];
             $key = 'DP' . implode('', explode(':', $hora));
-            Log::info("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and (Fecha = '$fecha' or Fecha = '$fechaDMY')");
             DB::statement("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and (Fecha = '$fecha' or Fecha = '$fechaDMY')");
             /*
             DB::table('acucitas')
