@@ -57,6 +57,7 @@ class Acucitas extends Model
             $fecha = strlen($fecha) === 10 ? $fecha . ' 00:00:00' : $fecha;
             $key = 'DP' . implode('', explode(':', $hora));
             Log::info("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and Fecha = '$fecha'");
+            DB::statement("SET DATEFORMAT ymd");
             DB::statement("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and Fecha = '$fecha'");
             /*
             DB::table('acucitas')
@@ -80,6 +81,7 @@ class Acucitas extends Model
             $fecha = strlen($fecha) === 10 ? $fecha . ' 00:00:00' : $fecha;
             $key = 'DP' . implode('', explode(':', $hora));
             Log::info("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and Fecha = '$fecha'");
+            DB::statement("SET DATEFORMAT ymd");
             DB::statement("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and Fecha = '$fecha'");
             /*
             DB::table('acucitas')
