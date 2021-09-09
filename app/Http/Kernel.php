@@ -23,6 +23,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \App\Http\Middleware\DownForMaintenance::class,
         \App\Http\Middleware\CustomHeaders::class,
+        \App\Http\Middleware\Cors::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
@@ -66,5 +67,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'verifyTokenWeb' => \App\Http\Middleware\VerifyTokenWeb::class,
+        "cors" => \App\Http\Middleware\Cors::class,
     ];
 }
