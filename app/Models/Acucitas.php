@@ -54,11 +54,12 @@ class Acucitas extends Model
      */
     public static function ConsumirDisponibilidad($centro, $fecha, $hora) {
         try{
-            $fecha = strlen($fecha) === 10 ? $fecha . ' 00:00:00' : $fecha;
+            $fecha = strlen($fecha) === 10 ? $fecha : substr($fecha, 0, 10);
+            $fechaArray = explode('-', $fecha);
+            $fechaDMY = $fechaArray[2] . '-' . $fechaArray[1] . '-' . $fechaArray[0];
             $key = 'DP' . implode('', explode(':', $hora));
-            Log::info("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and Fecha = '$fecha'");
-            DB::statement("SET DATEFORMAT ymd");
-            DB::statement("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and Fecha = '$fecha'");
+            Log::info("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and (Fecha = '$fecha' or Fecha = '$fechaDMY')");
+            DB::statement("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and (Fecha = '$fecha' or Fecha = '$fechaDMY')");
             /*
             DB::table('acucitas')
                 ->where('centro', '=', $centro)
@@ -78,11 +79,12 @@ class Acucitas extends Model
      */
     public static function RevertirDisponibilidadConsumida($centro, $fecha, $hora) {
         try{
-            $fecha = strlen($fecha) === 10 ? $fecha . ' 00:00:00' : $fecha;
+            $fecha = strlen($fecha) === 10 ? $fecha : substr($fecha, 0, 10);
+            $fechaArray = explode('-', $fecha);
+            $fechaDMY = $fechaArray[2] . '-' . $fechaArray[1] . '-' . $fechaArray[0];
             $key = 'DP' . implode('', explode(':', $hora));
-            Log::info("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and Fecha = '$fecha'");
-            DB::statement("SET DATEFORMAT ymd");
-            DB::statement("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and Fecha = '$fecha'");
+            Log::info("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and (Fecha = '$fecha' or Fecha = '$fechaDMY')");
+            DB::statement("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and (Fecha = '$fecha' or Fecha = '$fechaDMY')");
             /*
             DB::table('acucitas')
                 ->where('centro', '=', $centro)
