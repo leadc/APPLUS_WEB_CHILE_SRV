@@ -16,7 +16,7 @@ class DownForMaintenance
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!!env('DOWN_FOR_MAINTENANCE', false)) {
+        if (!!env('DOWN_FOR_MAINTENANCE', false) && $_COOKIE['debug'] !== 'develop') {
             return response('', 503);
         }
         return $next($request);
