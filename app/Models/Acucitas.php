@@ -54,10 +54,10 @@ class Acucitas extends Model
      */
     public static function ConsumirDisponibilidad($centro, $fecha, $hora) {
         try{
-            $fecha = strlen($fecha) === 10 ? $fecha : $fecha;
+            $fecha = strlen($fecha) === 10 ? $fecha . ' 00:00:00' : $fecha;
             $key = 'DP' . implode('', explode(':', $hora));
-            Log::info("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and SUBSTRING(Fecha, 0, 10) = '$fecha'");
-            DB::statement("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and SUBSTRING(Fecha, 0, 10) = '$fecha'");
+            Log::info("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and Fecha = '$fecha'");
+            DB::statement("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and Fecha = '$fecha'");
             /*
             DB::table('acucitas')
                 ->where('centro', '=', $centro)
@@ -77,10 +77,10 @@ class Acucitas extends Model
      */
     public static function RevertirDisponibilidadConsumida($centro, $fecha, $hora) {
         try{
-            $fecha = strlen($fecha) === 10 ? $fecha : $fecha;
+            $fecha = strlen($fecha) === 10 ? $fecha . ' 00:00:00' : $fecha;
             $key = 'DP' . implode('', explode(':', $hora));
-            Log::info("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and SUBSTRING(Fecha, 0, 10) = '$fecha'");
-            DB::statement("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and SUBSTRING(Fecha, 0, 10) = '$fecha'");
+            Log::info("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and Fecha = '$fecha'");
+            DB::statement("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and Fecha = '$fecha'");
             /*
             DB::table('acucitas')
                 ->where('centro', '=', $centro)
