@@ -55,21 +55,16 @@ class Acucitas extends Model
     public static function ConsumirDisponibilidad($centro, $fecha, $hora) {
         try{
             $fecha = strlen($fecha) === 10 ? $fecha . ' 00:00:00' : $fecha;
-            $acucita = Acucitas::where('centro', '=', $centro)->where('Fecha', '=', $fecha)->get()->first();
             $key = 'DP' . implode('', explode(':', $hora));
-            if ($acucita->$key > 0) {
-                $newValue = $acucita->$key - 1;
-                Log::info("UPDATE acucitas SET $key = $newValue WHERE centro = $centro and Fecha = '$fecha'");
-                DB::statement("UPDATE acucitas SET $key = $newValue WHERE centro = $centro and Fecha = '$fecha'");
-                /*
-                DB::table('acucitas')
-                    ->where('centro', '=', $centro)
-                    ->where('Fecha', '=', $fecha)
-                    ->update(["$key" => ($acucita->$key - 1)]);
-                */
-                return true;
-            }
-            return false;
+            Log::info("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and Fecha = '$fecha'");
+            DB::statement("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and Fecha = '$fecha'");
+            /*
+            DB::table('acucitas')
+                ->where('centro', '=', $centro)
+                ->where('Fecha', '=', $fecha)
+                ->update(["$key" => ($acucita->$key - 1)]);
+            */
+            return true;
         }catch(Exception $e){
             Log::error('Acucitas::ConsumirDisponibilidad', [$e->getMessage()]);
             throw new Exception('Se produjo un error al consumir la disponibilidad');
@@ -83,11 +78,9 @@ class Acucitas extends Model
     public static function RevertirDisponibilidadConsumida($centro, $fecha, $hora) {
         try{
             $fecha = strlen($fecha) === 10 ? $fecha . ' 00:00:00' : $fecha;
-            $acucita = Acucitas::where('centro', '=', $centro)->where('Fecha', '=', $fecha)->get()->first();
             $key = 'DP' . implode('', explode(':', $hora));
-            $newValue = $acucita->$key + 1;
-            Log::info("UPDATE acucitas SET $key = $newValue WHERE centro = $centro and Fecha = '$fecha'");
-            DB::statement("UPDATE acucitas SET $key = $newValue WHERE centro = $centro and Fecha = '$fecha'");
+            Log::info("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and Fecha = '$fecha'");
+            DB::statement("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and Fecha = '$fecha'");
             /*
             DB::table('acucitas')
                 ->where('centro', '=', $centro)
