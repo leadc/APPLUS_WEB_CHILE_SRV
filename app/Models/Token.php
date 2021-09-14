@@ -63,6 +63,5 @@ class Token extends Model
     public static function CleanOldTokens() {
         $currentTime = (new DateTime())->format("Y-m-d H:i:s");
         $deletedRows = Token::where('expiresAt', '<', $currentTime)->delete();
-        Log::info("Se eliminaron $deletedRows web tokens vencidos.");
     }
 }
