@@ -56,9 +56,8 @@ class Acucitas extends Model
         try{
             $fecha = strlen($fecha) === 10 ? $fecha : substr($fecha, 0, 10);
             $fechaArray = explode('-', $fecha);
-            $fechaDMY = $fechaArray[2] . '-' . $fechaArray[1] . '-' . $fechaArray[0];
             $key = 'DP' . implode('', explode(':', $hora));
-            DB::statement("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and (CONVERT(varchar, Fecha, 23) = '$fecha' or CONVERT(varchar, Fecha, 23) = '$fechaDMY')");
+            DB::statement("UPDATE acucitas SET $key = $key - 1 WHERE centro = $centro and CONVERT(varchar, Fecha, 23) = '$fecha'");
             /*
             DB::table('acucitas')
                 ->where('centro', '=', $centro)
@@ -80,9 +79,8 @@ class Acucitas extends Model
         try{
             $fecha = strlen($fecha) === 10 ? $fecha : substr($fecha, 0, 10);
             $fechaArray = explode('-', $fecha);
-            $fechaDMY = $fechaArray[2] . '-' . $fechaArray[1] . '-' . $fechaArray[0];
             $key = 'DP' . implode('', explode(':', $hora));
-            DB::statement("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and (CONVERT(varchar, Fecha, 23) = '$fecha' or CONVERT(varchar, Fecha, 23) = '$fechaDMY')");
+            DB::statement("UPDATE acucitas SET $key = $key + 1 WHERE centro = $centro and CONVERT(varchar, Fecha, 23) = '$fecha'");
             /*
             DB::table('acucitas')
                 ->where('centro', '=', $centro)
