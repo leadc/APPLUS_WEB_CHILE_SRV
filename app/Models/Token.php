@@ -51,7 +51,7 @@ class Token extends Model
             ->first();
         if ($tokenModel) {
             $currentTime->add(new DateInterval('PT'.self::$expireTimeInHours.'H'));
-            $tokenModel->expiresAt = $currentTime;
+            $tokenModel->expiresAt = $currentTime->format('Y-m-d\TH:i:s');
             $tokenModel->save();
         }
         return $tokenModel;
