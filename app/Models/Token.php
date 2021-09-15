@@ -34,7 +34,7 @@ class Token extends Model
         $tokenModel->userId = $userId;
         $expirationDate = new DateTime();
         $expirationDate->add(new DateInterval('PT'.self::$expireTimeInHours.'H'));
-        $tokenModel->expiresAt = $expirationDate;
+        $tokenModel->expiresAt = $expirationDate->format('Y-m-d\TH:i:s');
         $tokenModel->save();
         return $tokenModel->token;
     }
