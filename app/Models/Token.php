@@ -46,7 +46,7 @@ class Token extends Model
         $currentTime = new DateTime();
         $tokenModel = Token::where('token', '=', $token)
             ->where('userId', '=', $patente.$codigo)
-            ->where('expiresAt', '>', $currentTime->format("Y-m-d H:i:s"))
+            ->where('expiresAt', '>', $currentTime->format("Y-m-d\TH:i:s"))
             ->get()
             ->first();
         if ($tokenModel) {
