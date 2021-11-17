@@ -32,7 +32,10 @@ class Acucitas extends Model
         '20:00', '20:15', '20:30', '20:45',
     ];
 
-
+    /**
+     * Este método devuelve los datos de turnos para un día (un registro de la tabla acucitas)
+     * en caso de que ese registro no tenga horas disponibles devuelve null
+     */
     public function exportData() {
         $export = new stdClass();
         $export->fecha = substr($this->Fecha, 0, 10);
@@ -46,7 +49,7 @@ class Acucitas extends Model
                 array_push($export->horasDisponibles, $disp);
             }
         }
-        return $export;
+        return count($export->horasDisponibles) > 0 ? $export : null;
     }
 
     /**

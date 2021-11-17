@@ -180,7 +180,10 @@ class ReservasController extends Controller
             ];
 
             foreach($acucitas as $acucita) {
-                array_push($respuesta->disponibilidad, $acucita->exportData());
+                $datosAcucita = $acucita->exportData();
+                if ($datosAcucita !== null) {
+                    array_push($respuesta->disponibilidad, $datosAcucita);
+                }
             }
 
             return self::GetResponse($respuesta);
